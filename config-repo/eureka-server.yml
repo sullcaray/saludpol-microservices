@@ -1,0 +1,39 @@
+# ==============================================
+# CONFIGURACION ESPECIFICA PARA EUREKA SERVER
+# ==============================================
+
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+# Configuracion especifica del servidor Eureka
+eureka:
+  client:
+    registerWithEureka: false     # El servidor no se registra a si mismo
+    fetchRegistry: false          # El servidor no busca otros servidores
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  server:
+    enableSelfPreservation: false      # Desactivar en desarrollo
+    evictionIntervalTimerInMs: 10000   # Intervalo de limpieza
+    renewal-percent-threshold: 0.85    # Umbral de renovacion
+    response-cache-update-interval-ms: 5000
+
+# Configuracion especifica de Actuator para Eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,eureka
+  endpoint:
+    eureka:
+      enabled: true
+
+# Configuracion de logging especifica
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG

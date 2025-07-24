@@ -1,0 +1,49 @@
+# ==============================================
+# CONFIGURACION ESPECIFICA PARA CONFIG SERVER
+# ==============================================
+
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/sullcaray/saludpol-microservices.git
+          default-label: main
+          clone-on-start: true
+          search-paths: config-repo
+          timeout: 10
+        health:
+          repositories:
+            saludpol:
+              label: main
+              name: saludpol-microservices
+
+# Configuracion especifica de Eureka Client para Config Server
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+# Configuracion especifica de Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,refresh,bus-refresh,configserver
+  endpoint:
+    configserver:
+      enabled: true
+
+# Logging especifico para Config Server
+logging:
+  level:
+    org.springframework.cloud.config: DEBUG
+    org.eclipse.jgit: INFO
